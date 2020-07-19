@@ -1,5 +1,7 @@
 # Android Project
 
+**Name :** Anime Music Player
+<br>
 **Library**
 
 - implementation 'com.github.Triggertrap:SeekArc:v1.1'
