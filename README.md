@@ -10,3 +10,7 @@
 - implementation 'com.jakewharton.threetenabp:threetenabp:1.2.4'
 - implementation 'com.android.volley:volley:1.1.1'
 - implementation 'com.google.android.material:material:1.1.0'
+
+**API Server**
+
+- https://animemusic.us
