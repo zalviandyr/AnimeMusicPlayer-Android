@@ -2,10 +2,11 @@
 <com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/mcv_item_music"
+    android:id="@+id/material_card"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="10dp"
+    android:layout_marginStart="5dp"
+    android:layout_marginEnd="5dp"
     android:clickable="true"
     android:focusable="true"
     app:cardBackgroundColor="@android:color/white"
@@ -21,7 +22,7 @@
         android:padding="10dp">
 
         <com.mikhaellopez.circularimageview.CircularImageView
-            android:id="@+id/civ_item_music"
+            android:id="@+id/circular_image"
             android:layout_width="64dp"
             android:layout_height="64dp"
             app:civ_border="true"
@@ -37,18 +38,18 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_marginStart="10dp"
-            android:layout_toEndOf="@id/civ_item_music"
+            android:layout_toEndOf="@id/circular_image"
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/tv_band_name_item_music"
+                android:id="@+id/tv_band_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textAppearance="?attr/textAppearanceBody1"
                 tools:text="Zukron Alviandy R" />
 
             <TextView
-                android:id="@+id/tv_title_item_music"
+                android:id="@+id/tv_title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"

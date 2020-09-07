@@ -2,4 +2,5 @@
     <string name="app_name">Anime Music Player</string>
     <string name="my_name">Zukron Alviandy R</string>
     <string name="init_duration">00:00</string>
+    <string name="no_internet">No internet connection</string>
 </resources>

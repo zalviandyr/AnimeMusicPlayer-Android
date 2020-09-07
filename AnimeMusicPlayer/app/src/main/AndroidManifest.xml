@@ -16,8 +16,8 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
         tools:replace="android:icon">
-        <activity android:name="com.zukron.animemusicplayer.activity.DetailMusicActivity"></activity>
-        <activity android:name="com.zukron.animemusicplayer.activity.MainActivity">
+        <activity android:name="com.zukron.animemusicplayer.ui.activity.DetailMusicActivity"/>
+        <activity android:name="com.zukron.animemusicplayer.ui.activity.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
