@@ -1,17 +1,18 @@
 package com.zukron.animemusicplayer.repository
 
 import android.content.Context
+import android.util.Log
 import androidx.lifecycle.LiveData
 import com.zukron.animemusicplayer.model.DetailMusicItem
 import com.zukron.animemusicplayer.model.MusicItem
-import com.zukron.animemusicplayer.networking.ApiService
+import com.zukron.animemusicplayer.networking.InternetConnectionListener
 import com.zukron.animemusicplayer.networking.RestApi
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.Dispatchers.Main
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import com.zukron.animemusicplayer.service.Utilities
+import kotlinx.coroutines.CoroutineExceptionHandler
 
 /**
  * Project name is AnimeMusicPlayer
@@ -19,16 +20,9 @@ import com.zukron.animemusicplayer.service.Utilities
  * Contact me if any issues on zukronalviandy@gmail.com
  */
 class MusicRepository(context: Context) {
-    // if no connection and check cache is exist
-    private val apiService: ApiService? = if (Utilities.getConnectionType(context) != 0) {
-        RestApi.getApiService(context)
-    } else {
-        // if cache dir not empty
-        if (context.cacheDir.listFiles()?.size != 0) {
-            RestApi.getApiService(context)
-        } else {
-            null
-        }
+    private val apiService = RestApi.getApiService(context)
+    private val handler = CoroutineExceptionHandler { _, exception ->
+        Log.d("Debug", exception.message.toString())
     }
 
     fun getMusicList(): LiveData<List<MusicItem>> {
@@ -36,8 +30,8 @@ class MusicRepository(context: Context) {
             override fun onActive() {
                 super.onActive()
 
-                apiService?.let {
-                    CoroutineScope(IO).launch {
+                apiService.let {
+                    CoroutineScope(IO).launch(handler) {
                         val music = it.getMusicList()
                         val musicList = music.data
 
@@ -55,8 +49,8 @@ class MusicRepository(context: Context) {
             override fun onActive() {
                 super.onActive()
 
-                apiService?.let {
-                    CoroutineScope(IO).launch {
+                apiService.let {
+                    CoroutineScope(IO).launch(handler) {
                         val music = it.getMusic(id)
                         val musicDetail = music.data
 
@@ -67,5 +61,9 @@ class MusicRepository(context: Context) {
                 }
             }
         }
+    }
+
+    fun setInternetConnectionListener(internetConnectionListener: InternetConnectionListener) {
+        RestApi.setInternetConnectionListener(internetConnectionListener)
     }
 }

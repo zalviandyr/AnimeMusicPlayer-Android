@@ -8,7 +8,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.snackbar.Snackbar
 import com.zukron.animemusicplayer.R
 import com.zukron.animemusicplayer.adapter.MusicListAdapter
-import com.zukron.animemusicplayer.service.Utilities
+import com.zukron.animemusicplayer.networking.InternetConnectionListener
 import com.zukron.animemusicplayer.ui.MainViewModel
 import kotlinx.android.synthetic.main.activity_main.*
 
@@ -17,7 +17,7 @@ import kotlinx.android.synthetic.main.activity_main.*
  * Created by Zukron Alviandy R on 9/7/2020
  * Contact me if any issues on zukronalviandy@gmail.com
  */
-class MainActivity : AppCompatActivity(), MusicListAdapter.OnSelectedMusic {
+class MainActivity : AppCompatActivity(), MusicListAdapter.OnSelectedMusic, InternetConnectionListener {
     private lateinit var mainViewModel: MainViewModel
     private lateinit var musicListAdapter: MusicListAdapter
 
@@ -35,27 +35,26 @@ class MainActivity : AppCompatActivity(), MusicListAdapter.OnSelectedMusic {
         ).get(MainViewModel::class.java)
 
         mainViewModel.getMusicList.observe(this) {
-            if (it != null) {
-                musicListAdapter.musicItemList = it
-                pb_list_music.visibility = View.GONE
-            }
+            musicListAdapter.musicItemList = it
+            pb_list_music.visibility = View.GONE
         }
+
+        mainViewModel.setInternetConnectionListener(this)
 
         // recycler view
         rv_list_music.adapter = musicListAdapter
-
-        // snackbar for internet connection
-        if (Utilities.getConnectionType(this) == 0) {
-            Snackbar.make(linear_layout, R.string.no_internet, Snackbar.LENGTH_INDEFINITE)
-                    .setAnimationMode(Snackbar.ANIMATION_MODE_SLIDE)
-                    .setDuration(20000)
-                    .show()
-        }
     }
 
     override fun onSelectedItem(id: Int) {
         val intent = Intent(this, DetailMusicActivity::class.java)
         intent.putExtra(DetailMusicActivity.EXTRA_ID, id)
         startActivity(intent)
+    }
+
+    override fun onInternetUnavailable() {
+        Snackbar.make(linear_layout, R.string.no_internet, Snackbar.LENGTH_INDEFINITE)
+                .setAnimationMode(Snackbar.ANIMATION_MODE_SLIDE)
+                .setDuration(20000)
+                .show()
     }
 }

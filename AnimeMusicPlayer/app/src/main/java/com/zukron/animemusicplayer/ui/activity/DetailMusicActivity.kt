@@ -23,9 +23,10 @@ import com.google.android.exoplayer2.util.Util
 import com.google.android.material.snackbar.Snackbar
 import com.triggertrap.seekarc.SeekArc
 import com.zukron.animemusicplayer.R
+import com.zukron.animemusicplayer.networking.InternetConnectionListener
 import com.zukron.animemusicplayer.service.ExoBuilderBuilder
 import com.zukron.animemusicplayer.service.Utilities.convertTime
-import com.zukron.animemusicplayer.ui.MainViewModel
+import com.zukron.animemusicplayer.ui.DetailViewModel
 import kotlinx.android.synthetic.main.activity_detail_music.*
 import java.io.File
 
@@ -34,12 +35,12 @@ import java.io.File
  * Created by Zukron Alviandy R on 9/7/2020
  * Contact me if any issues on zukronalviandy@gmail.com
  */
-class DetailMusicActivity : AppCompatActivity(), Player.EventListener, View.OnClickListener, SeekArc.OnSeekArcChangeListener {
+class DetailMusicActivity : AppCompatActivity(), Player.EventListener, View.OnClickListener, SeekArc.OnSeekArcChangeListener, InternetConnectionListener {
     companion object {
         const val EXTRA_ID = "extra_id"
     }
 
-    private lateinit var mainViewModel: MainViewModel
+    private lateinit var detailViewModel: DetailViewModel
     private lateinit var simpleExoPlayer: SimpleExoPlayer
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -50,15 +51,15 @@ class DetailMusicActivity : AppCompatActivity(), Player.EventListener, View.OnCl
         setSupportActionBar(tb_detail_music)
 
         // view model
-        mainViewModel = ViewModelProvider(
+        detailViewModel = ViewModelProvider(
                 this,
                 ViewModelProvider.AndroidViewModelFactory(application)
-        ).get(MainViewModel::class.java)
+        ).get(DetailViewModel::class.java)
 
         val id = intent.getIntExtra(EXTRA_ID, 0)
-        mainViewModel.setMusicId(id)
+        detailViewModel.setMusicId(id)
 
-        mainViewModel.getMusicDetail.observe(this) {
+        detailViewModel.getMusicDetail.observe(this) {
             pb_detail_music.visibility = View.GONE
 
             tv_band_name_detail_music.text = it.bandName
@@ -70,6 +71,8 @@ class DetailMusicActivity : AppCompatActivity(), Player.EventListener, View.OnCl
                     .diskCacheStrategy(DiskCacheStrategy.ALL)
                     .into(civ_cover_detail_music)
         }
+
+        detailViewModel.setInternetConnectionListener(this)
 
         // exo player
         simpleExoPlayer = ExoBuilderBuilder.getInstance(this)
@@ -120,7 +123,7 @@ class DetailMusicActivity : AppCompatActivity(), Player.EventListener, View.OnCl
         Snackbar.make(relative_layout, R.string.no_internet, Snackbar.LENGTH_INDEFINITE).show()
     }
 
-    override fun onClick(p0: View?) {
+    override fun onClick(view: View?) {
         simpleExoPlayer.playWhenReady = !simpleExoPlayer.playWhenReady
     }
 
@@ -137,6 +140,12 @@ class DetailMusicActivity : AppCompatActivity(), Player.EventListener, View.OnCl
 
     override fun onStopTrackingTouch(seekArc: SeekArc?) {
         simpleExoPlayer.playWhenReady = true
+    }
+
+    override fun onInternetUnavailable() {
+        Snackbar.make(relative_layout, R.string.no_internet, Snackbar.LENGTH_SHORT)
+                .setAnimationMode(Snackbar.ANIMATION_MODE_SLIDE)
+                .show()
     }
 
     private fun setImageRotation() {
@@ -162,7 +171,7 @@ class DetailMusicActivity : AppCompatActivity(), Player.EventListener, View.OnCl
     }
 
     private fun prepareExoPlayer() {
-        mainViewModel.getMusicDetail.observe(this) {
+        detailViewModel.getMusicDetail.observe(this) {
             val userAgent = Util.getUserAgent(this, getString(R.string.app_name))
 
             // specify cache folder

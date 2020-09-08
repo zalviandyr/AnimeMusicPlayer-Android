@@ -81,6 +81,7 @@ dependencies {
     // OK Http
     def ok_http_version = "4.8.0"
     implementation "com.squareup.okhttp3:logging-interceptor:$ok_http_version"
+    implementation "com.squareup.okhttp3:okhttp:$ok_http_version"
 
     // Date time
     implementation 'com.jakewharton.threetenabp:threetenabp:1.2.4'
