@@ -24,7 +24,7 @@ import com.google.android.material.snackbar.Snackbar
 import com.triggertrap.seekarc.SeekArc
 import com.zukron.animemusicplayer.R
 import com.zukron.animemusicplayer.networking.InternetConnectionListener
-import com.zukron.animemusicplayer.service.ExoBuilderBuilder
+import com.zukron.animemusicplayer.service.ExoBuilder
 import com.zukron.animemusicplayer.service.Utilities.convertTime
 import com.zukron.animemusicplayer.ui.DetailViewModel
 import kotlinx.android.synthetic.main.activity_detail_music.*
@@ -75,7 +75,7 @@ class DetailMusicActivity : AppCompatActivity(), Player.EventListener, View.OnCl
         detailViewModel.setInternetConnectionListener(this)
 
         // exo player
-        simpleExoPlayer = ExoBuilderBuilder.getInstance(this)
+        simpleExoPlayer = ExoBuilder.getInstance(this)
         prepareExoPlayer()
         simpleExoPlayer.addListener(this)
 

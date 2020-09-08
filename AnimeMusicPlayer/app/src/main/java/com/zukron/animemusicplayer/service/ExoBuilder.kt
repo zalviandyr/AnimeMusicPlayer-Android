@@ -8,7 +8,7 @@ import com.google.android.exoplayer2.SimpleExoPlayer
  * Created by Zukron Alviandy R on 9/7/2020
  * Contact me if any issues on zukronalviandy@gmail.com
  */
-object ExoBuilderBuilder {
+object ExoBuilder {
     private var simpleExoPlayer: SimpleExoPlayer? = null
 
     fun getInstance(context: Context): SimpleExoPlayer {
