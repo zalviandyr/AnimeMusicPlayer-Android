@@ -17,7 +17,6 @@ abstract class NetworkConnectionInterceptor : Interceptor {
     abstract fun onInternetUnavailable()
 
     override fun intercept(chain: Interceptor.Chain): Response {
-        println(isInternetAvailable())
         return if (isInternetAvailable() != 0) {
             val response = chain.proceed(chain.request())
 
